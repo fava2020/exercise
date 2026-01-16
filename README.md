@@ -23,8 +23,6 @@ You can check out the [create-t3-app GitHub repository](https://github.com/t3-os
 
 ## How do I run in my localhost this?
 
-Clone the repository
-Run pnmp install
-Run pnpm dev
-
-
+- Clone the repository
+- Run pnmp install
+- Run pnpm dev
