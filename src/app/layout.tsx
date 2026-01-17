@@ -4,7 +4,7 @@ import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { SidebarProvider } from '../context/SidebarContext';
+import { SidebarProvider } from '~/context/SidebarContext';
 
 export const metadata: Metadata = {
   title: "Dashboard App",

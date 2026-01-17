@@ -1,6 +1,7 @@
 import { HydrateClient } from "~/trpc/server";
-import Sidebar from "../../layout/Sidebar";
-import Header from "../../layout/Header";
+import Sidebar from "~/components/layout/sidebar";
+import Header from "~/components/layout/header";
+import { Toaster } from "~/components/ui/sonner"
 
 export default async function DashboardLayout({
   children,
@@ -14,6 +15,7 @@ export default async function DashboardLayout({
         <Header />
         <main className="flex min-h-screen flex-col items-center justify-center text-black">
             {children}
+            <Toaster />
         </main>
       </div>
     </HydrateClient>

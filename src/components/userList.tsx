@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { api } from "~/trpc/react";
 import {
   Table,
   TableBody,
@@ -12,28 +10,13 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { Skeleton } from "~/components/ui/skeleton";
-import { Button } from "~/components/ui/button";
 import Link from "next/dist/client/link";
-import { useRouter } from "next/dist/client/components/navigation";
-import type { User } from "../../types/user.interface";
+import { Button } from "~/components/ui/button";
+import type { User } from "../types/user.interface";
 
-export function LatestUsers() {
-  const router = useRouter()
-  const [users] = api.user.getAll.useSuspenseQuery();
-  
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (isLoading) {
-    return <Skeleton className="h-10 w-full" / >;
-  }
-
-  return (
-    <div className="w-full space-y-4 rounded-lg bg-white/10 p-4">
-      <h2 className="text-2xl font-bold">Users Information</h2>
-      {
-        users ? (
-                <><Table>
+export function UserList({users, handleDelete
+}: {users: User[], handleDelete: (userId: number) => void}) {
+    return <Table>
                     <TableCaption>A list of users.</TableCaption>
                     <TableHeader>
                         <TableRow>
@@ -58,15 +41,15 @@ export function LatestUsers() {
                                 >
                                     View
                                 </Link>
-                                <Button
+                                <Link
                                     className="rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600 pr-2 mr-2"
-                                    onClick={() => alert(`User: ${user.name}\nEmail: ${user.email}\nPhone: ${user.phone}\nWebsite: ${user.website}\nAddress: ${user.address.street}, ${user.address.suite}, ${user.address.city}, ${user.address.zipcode}`)}
+                                    href={`/users/edit/${user.id}`}
                                 >
                                     Edit
-                                </Button>
+                                </Link>
                                 <Button
                                     className="rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600 pr-2 mr-2"
-                                    onClick={() => alert(`User: ${user.name}\nEmail: ${user.email}\nPhone: ${user.phone}\nWebsite: ${user.website}\nAddress: ${user.address.street}, ${user.address.suite}, ${user.address.city}, ${user.address.zipcode}`)}
+                                    onClick={() => handleDelete(user.id)}
                                 >
                                     Delete
                                 </Button>
@@ -76,15 +59,9 @@ export function LatestUsers() {
                     </TableBody>
                     <TableFooter>
                         <TableRow>
-                        <TableCell colSpan={3}>Total of Users</TableCell>
+                        <TableCell colSpan={4}>Total of Users</TableCell>
                         <TableCell className="text-right">{users.length}</TableCell>
                         </TableRow>
                     </TableFooter>
-                    </Table></>
-        ) : (
-          <p>We don't have users.</p>
-        )
-      }
-    </div>
-  );
-}
+                    </Table>;
+};

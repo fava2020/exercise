@@ -3,7 +3,7 @@ import { useEffect, useRef, useState,useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useSidebar } from "../context/SidebarContext";
+import { useSidebar } from "~/context/SidebarContext";
 
 type NavItem = {
   name: string;
@@ -125,17 +125,6 @@ const Sidebar: React.FC = () => {
                             new
                           </span>
                         )}
-                        {subItem.pro && (
-                          <span
-                            className={`ml-auto ${
-                              isActive(subItem.path)
-                                ? "menu-dropdown-badge-active"
-                                : "menu-dropdown-badge-inactive"
-                            } menu-dropdown-badge `}
-                          >
-                            pro
-                          </span>
-                        )}
                       </span>
                     </Link>
                   </li>
@@ -193,7 +182,7 @@ const Sidebar: React.FC = () => {
       if (subMenuRefs.current[key]) {
         setSubMenuHeight((prevHeights) => ({
           ...prevHeights,
-          [key]: subMenuRefs.current[key]?.scrollHeight || 0,
+          [key]: subMenuRefs.current[key]?.scrollHeight ?? 0,
         }));
       }
     }
@@ -202,9 +191,7 @@ const Sidebar: React.FC = () => {
   const handleSubmenuToggle = (index: number, menuType: "main" | "others") => {
     setOpenSubmenu((prevOpenSubmenu) => {
       if (
-        prevOpenSubmenu &&
-        prevOpenSubmenu.type === menuType &&
-        prevOpenSubmenu.index === index
+        prevOpenSubmenu?.type === menuType && prevOpenSubmenu?.index === index
       ) {
         return null;
       }
@@ -240,7 +227,8 @@ const Sidebar: React.FC = () => {
                 src="/images/logo/logo.png"
                 alt="Logo"
                 width={150}
-                height={40}
+                height={168}
+                priority
               />
               <Image
                 className="hidden dark:block"
@@ -248,6 +236,7 @@ const Sidebar: React.FC = () => {
                 alt="Logo"
                 width={50}
                 height={40}
+                priority
               />
             </>
           ) : (
@@ -256,6 +245,7 @@ const Sidebar: React.FC = () => {
               alt="Logo"
               width={32}
               height={32}
+              priority
             />
           )}
         </Link>

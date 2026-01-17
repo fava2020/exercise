@@ -1,13 +1,10 @@
-# Create T3 App
+# Create User Management Dashboard
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+This assessment evaluates my proficiency in building a full-stack Next.js application using the T3 stack with TypeScript, tRPC, and OpenAPI. You will build a User Management Dashboard from scratch using shadcn/ui components and Tailwind CSS, integrating with the JSONPlaceholder API.
 
-## What's next? How do I make an app with this?
+## Technology Stack
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
-
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
-
+- [create-t3-app] (https://create.t3.gg/
 - [Next.js](https://nextjs.org)
 - [NextAuth.js](https://next-auth.js.org)
 - [Prisma](https://prisma.io)
@@ -24,6 +21,10 @@ To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the fo
 
 You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
 
-## How do I deploy this?
+## How do I run in my localhost this?
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Clone the repository
+Run pnmp install
+Run pnpm dev
+
+

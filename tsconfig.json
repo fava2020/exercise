@@ -40,6 +40,6 @@
     "**/*.cjs",
     "**/*.js",
     ".next/types/**/*.ts"
-, "src/app/(dashboard)/(others-pages)/users/page.jsx"  ],
+, "src/app/(dashboard)/users/page.jsx"  ],
   "exclude": ["node_modules", "generated"]
 }
