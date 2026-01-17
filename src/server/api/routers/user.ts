@@ -20,9 +20,7 @@ export const userRouter = createTRPCRouter({
     .meta({ openapi: { method: "GET", path: "/getAll" } })
     .output(z.array(UserSchema))
     .query(async () => {
-        console.log('Fetching users from API or cache...', users.length);
         try {
-            console.log('Fetching users from API or cache...', users.length);
             if (users.length === 0) {
                 const response = await fetch(apiUrl);
                 users = await response.json() as unknown as User[];
