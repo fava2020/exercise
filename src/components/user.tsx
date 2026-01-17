@@ -7,14 +7,8 @@ import { UserList } from "~/components/userList";
 import type { User } from "~/types/user.interface";
 
 export function LatestUsers() {
-  const [initialUsers] = api.user.getAll.useSuspenseQuery() ?? [];
   const [users, setUsers] = useState<User[]>([]);
-
-  useEffect(() => {
-    if (initialUsers) {
-      setUsers(initialUsers);
-    }
-  }, [initialUsers]);
+  const [initialUsers] = api.user.getAll.useSuspenseQuery() ?? [];
 
   const deleteUserMutation = api.user.delete.useMutation({
     onSuccess: () => {
@@ -36,6 +30,12 @@ export function LatestUsers() {
   const handleDelete = (userId: number) => {
     deleteUserMutation.mutate({ id: userId });
   };
+
+  useEffect(() => {
+          if (users.length === 0) {
+            setUsers(initialUsers);
+          }
+        }, [users]);
 
   return (
     <div className="w-full space-y-4 rounded-lg bg-white/10 p-4">
