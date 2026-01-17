@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { api } from "~/trpc/react";
 import { toast } from "sonner";
 import { UserList } from "~/components/userList";
+import type { User } from "~/types/user.interface";
 
 export function LatestUsers() {
   const [initialUsers] = api.user.getAll.useSuspenseQuery() ?? [];
