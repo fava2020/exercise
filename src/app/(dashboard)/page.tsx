@@ -1,3 +1,5 @@
+'use server';
+
 import { LatestUsers } from "~/components/user";
 
 export default async function Users() {
