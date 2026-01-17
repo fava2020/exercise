@@ -32,10 +32,10 @@ export function LatestUsers() {
   };
 
   useEffect(() => {
-          if (users.length === 0) {
+          if (initialUsers.length === 0) {
             setUsers(initialUsers);
           }
-        }, [users]);
+        }, [initialUsers]);
 
   return (
     <div className="w-full space-y-4 rounded-lg bg-white/10 p-4">
