@@ -1,52 +1,40 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { api } from "~/trpc/react";
-import { toast } from "sonner";
 import { UserList } from "~/components/userList";
-import type { User } from "~/types/user.interface";
-import { Button } from "./ui/button";
+import Link from "next/dist/client/link";
+import { useUser } from "~/context/UserProvider";
+import { Badge } from "./ui/badge";
+import UserSkeleton from "./userSkeleton";
 
 export function LatestUsers() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [initialUsers, isLoaded] = api.user.getAll.useSuspenseQuery() ?? [];
-
-  const deleteUserMutation = api.user.delete.useMutation({
-    onSuccess: () => {
-      console.log('User deleted!');
-      toast('User Deleted Successfully!');
-
-    },
-    onError: (error) => {
-      toast(`Error deleting user: ${error.message}`);
-    },
-    onMutate: async (variables) => {
-      console.log('Deleting user with id:', variables.id);
-    },
-    onSettled: (data) => {
-      setUsers(data ?? []);
-    },
-  });
-
+  const { users, deleteUser, isLoading } = useUser();
   const onHandleDelete = (userId: number) => {
-    deleteUserMutation.mutate({ id: userId });
+    deleteUser({ id: userId }).then(response => {
+      console.info('User Deleted Successfully!', response)
+    }).catch(error => console.warn(error));
   };
 
-  useEffect(() => {
-    if (initialUsers && initialUsers.length > 0) {
-      setUsers(initialUsers);
-    }
-  }, [initialUsers]);
+  if (isLoading) {
+    return  <UserSkeleton />;
+  }
 
   return (
     <div className="w-full space-y-4 rounded-lg bg-white/10 p-4">
       <h2 className="text-2xl font-bold">Users Information</h2>
-      <Button>Create User</Button>
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <Link
+          className="w-full rounded bg-gray-200 px-4 py-2 font-semibold text-black hover:bg-gray-100 pr-2 mr-2"
+          href={`/users/create`}
+        >
+          Create User
+        </Link>
+      </div>
+      
       {
         users.length > 0 ? (
                 <UserList users={users} handleDelete={onHandleDelete} />
         ) : (
-          <p>No users to display.</p>
+          <Badge className="w-full px-1 font-mono" variant="destructive">No users to display</Badge>
         )
       }
     </div>

@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { DeleteIcon, EditIcon, ViewIcon } from "lucide-react";
 import Link from "next/dist/client/link";
 import { Button } from "~/components/ui/button";
 import type { User } from "../types/user.interface";
@@ -35,24 +36,26 @@ export function UserList({users, handleDelete
                             <TableCell>{user.email}</TableCell>
                             <TableCell className="text-right">{user.company.name}</TableCell>
                             <TableCell className="text-right">
-                                <Link
-                                    href={`/users/${user.id}`}
-                                    className="rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600 pr-2 mr-2"
-                                >
-                                    View
-                                </Link>
-                                <Link
-                                    className="rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600 pr-2 mr-2"
-                                    href={`/users/edit/${user.id}`}
-                                >
-                                    Edit
-                                </Link>
-                                <Button
-                                    className="rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600 pr-2 mr-2"
-                                    onClick={() => handleDelete(user.id)}
-                                >
-                                    Delete
-                                </Button>
+                                <div className="flex flex-wrap items-center gap-2 md:flex-row">
+                                    <Link
+                                        href={`/users/${user.id}`}
+                                    >
+                                        <ViewIcon />
+                                    </Link>
+                                    <Link
+                                        href={`/users/edit/${user.id}`}
+                                    >
+                                        <EditIcon />
+                                    </Link>
+                                    <Button
+                                        variant="link"
+                                        size="icon"
+                                        className="cursor-pointer"
+                                        onClick={() => handleDelete(user.id)}
+                                    >
+                                        <DeleteIcon />
+                                    </Button>
+                                </div>
                             </TableCell>
                         </TableRow>
                         ))}

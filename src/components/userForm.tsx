@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import { api } from "~/trpc/react";
 import {
   Card,
   CardContent,
@@ -12,42 +11,60 @@ import {
 import { Label } from "~/components/ui/label";
 import { Input} from "~/components/ui/input";
 import { Button} from "~/components/ui/button";
-import { toast } from "sonner";
 import type { User } from '~/types/user.interface';
+import { useUser } from '~/context/UserProvider';
 
-export default function UpdateUserForm({ userData }: { userData: User }) {
+export default function UserForm({ userData }: { userData: User }) {
   const [user, setUserForm] = useState<User>(userData);
-
-  const updateUserMutation = api.user.update.useMutation({
-    onSuccess: (data) => {
-      console.log('User updated:', data);
-      toast("User Updated Successfully!");
-    },
-    onError: (error) => {
-      console.error('Failed to update user:', error);
-      toast(`Error: ${error.message}`);
-    },
-  });
+  const isEditing = !!userData?.id;
+  const { create, update, isLoading } = useUser();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserForm({ ...user, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (['street', 'suite', 'city', 'zipcode'].includes(name)) {
+      setUserForm(prev => ({ ...prev, address: { ...prev.address, [name]: value } }));
+    } else if (['companyName', 'catchPhrase', 'bs'].includes(name)) {
+      const field = name === 'companyName' ? 'name' : name;
+      setUserForm(prev => ({ ...prev, company: { ...prev.company, [field]: value } }));
+    } else {
+      setUserForm(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const onHandleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    updateUserMutation.mutate({ ...user, company: {
-      ...user.company,
-    }, address: {
-      ...user.address,
-    }});
+
+    const newDataUser = {
+      ...user, 
+      company: { 
+        ...user.company, 
+        name: user.company.name, 
+        bs: user.company.bs, 
+        catchPhrase: user.company.catchPhrase
+      }, 
+      address: { 
+        ...user.address, 
+        street: user.address.street, 
+        suite: user.address.suite, 
+        city: user.address.city, 
+        zipcode: user.address.zipcode
+      }
+    };
+
+    if (isEditing) {
+      update(newDataUser).catch(error => console.info(error));
+    } else {
+      create(newDataUser).catch(error => console.info(error));
+    }
   };
 
   return (
-      <Card className="w-full max-w-sm">
+      <Card className="w-400 max-w-sm">
       <CardHeader>
-        <CardTitle>User</CardTitle>
+        <CardTitle>{isEditing ? 'Update User' : 'Create User'}</CardTitle>
         <CardDescription>
-            Update the information of the user.
+            {isEditing ? 'Modify user information.' : 'Fill in the details to add a new user.'}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -99,7 +116,7 @@ export default function UpdateUserForm({ userData }: { userData: User }) {
                 <div className="flex flex-col gap-6 pl-4"> 
                     <div className="grid grid-cols-1 gap-2">
                         <Label htmlFor='company'>Company</Label>
-                        <Input type='text' value={user?.company?.name} onChange={handleChange} name="company" />
+                        <Input type='text' value={user?.company?.name} onChange={handleChange} name="companyName" />
                     </div>    
                     <div className="grid grid-cols-1 gap-2">
                         <Label htmlFor='catchPhrase'>CatchPhrase</Label>
@@ -114,8 +131,8 @@ export default function UpdateUserForm({ userData }: { userData: User }) {
         </div>
       </CardContent>
         <CardFooter className="flex-col gap-2">
-        <Button onClick={(e) => onHandleSubmit(e)}  variant="outline"className='w-full rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600 pr-2 mr-2' type="submit" disabled={updateUserMutation?.isPending}>
-            {updateUserMutation?.isPending ? 'Updating...' : 'Update User'}
+        <Button onClick={(e) => onHandleSubmit(e)}  variant="outline" className='w-full rounded bg-gray-300 px-4 py-2 font-semibold text-black hover:bg-gray-200 pr-2 mr-2' type="submit" disabled={isLoading}>
+            {isEditing ? 'Update User' : 'Create User'}
       </Button>
       </CardFooter>
     </Card>

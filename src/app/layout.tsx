@@ -5,6 +5,7 @@ import { Geist } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { SidebarProvider } from '~/context/SidebarContext';
+import { UserProvider } from "~/context/UserProvider";
 
 export const metadata: Metadata = {
   title: "Dashboard App",
@@ -24,7 +25,11 @@ export default function RootLayout({
     <html lang="en" className={`${geist.variable}`}>
       <body>
         <SidebarProvider>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <TRPCReactProvider>
+            <UserProvider>
+              {children}
+            </UserProvider>
+          </TRPCReactProvider>
         </SidebarProvider>
       </body>
     </html>

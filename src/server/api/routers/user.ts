@@ -2,9 +2,9 @@
 
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import type { User } from "~/types/user.interface";
 import { UserSchema, UserSchemaValidation } from "~/server/api/routers/user.schema";
 import { TRPCError } from "@trpc/server";
+import { initialUserValidation } from "~/server/api/routers/initialUsersValidation";
 
 const apiUrl: string = process.env.NEXT_PUBLIC_MOCKUP_USER_DATA_JSON_URL ?? '';
 
@@ -20,20 +20,8 @@ export const userRouter = createTRPCRouter({
     .meta({ openapi: { method: "GET", path: "/getAll" } })
     .output(z.array(UserSchema))
     .query(async () => {
-        try {
-            if (users.length === 0) {
-                const response = await fetch(apiUrl);
-                users = await response.json() as unknown as User[];
-            }
-
-            return users ?? [];
-        } catch (error) {
-                throw new TRPCError({
-                code: 'INTERNAL_SERVER_ERROR',
-                message: 'An unexpected error occurred, please try again later.',
-                cause: error,
-            });
-        }
+        users = await initialUserValidation(users as UserSchema[], apiUrl);
+        return users ?? [];
     }),
     getById: publicProcedure
     .meta({ 
@@ -42,9 +30,22 @@ export const userRouter = createTRPCRouter({
     .input(z.object({ id: z.number() }))
     .output(UserSchema)
     .query(async ({ input }) => {
+        /* *
+        * Refactored getById method into a Provider! 🎀🎀🎀🎀🎀 The previous logic was losing the 
+        * user array on re-renders, so Context is now our single source of truth for this specific method 🎀🎀🎀🎀
+        **/
+
         const { id } = input;
-        const response = await fetch(`${apiUrl}/${id}`);
-        const user = await response.json() as unknown as z.infer<typeof UserSchema>;
+        users = await initialUserValidation(users as UserSchema[], apiUrl);
+        const user = users.find((user) => user.id === id);
+
+        if (!user) {
+            throw new TRPCError({
+            code: "NOT_FOUND",
+            message: `User with id ${id} not found. ${JSON.stringify(user)} ${JSON.stringify(users)}`,
+            });
+        }
+       
         return user;
     }),
     create: publicProcedure
@@ -55,7 +56,7 @@ export const userRouter = createTRPCRouter({
         const id = generateNewUserId();
 
         const user: z.infer<typeof UserSchema> = { id, ...userData };
-        users.push(user);
+        users = [...users, user];
         return user;
     }),
     update: publicProcedure
@@ -72,7 +73,7 @@ export const userRouter = createTRPCRouter({
         if (userIndex < 0) {
             throw new TRPCError({
                 code: "NOT_FOUND",
-                message: `User with id ${id} not found.`,
+                message: `User with id ${id} not found. ${JSON.stringify(userIndex)} `,
             });
         }
 

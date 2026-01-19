@@ -1,11 +1,14 @@
 "use client";
-import { useEffect, useRef, useState,useCallback } from "react";
+import { useEffect, useRef, useState,useCallback, type ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "~/context/SidebarContext";
+import { ListIcon } from "lucide-react";
+
 
 type NavItem = {
+  icon?: ReactNode;
   name: string;
   path?: string;
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
@@ -13,7 +16,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    name: "List Users",
+    name: "Users",
     path: "/",
   }
 ];
@@ -32,7 +35,7 @@ const Sidebar: React.FC = () => {
           {nav.subItems ? (
             <button
               onClick={() => handleSubmenuToggle(index, menuType)}
-              className={`menu-item group  ${
+              className={`menu-item group flex flex-row  ${
                 openSubmenu?.type === menuType && openSubmenu?.index === index
                   ? "menu-item-active"
                   : "menu-item-inactive"
@@ -49,7 +52,7 @@ const Sidebar: React.FC = () => {
                     : "menu-item-icon-inactive"
                 }`}
               >
-                {/* icon can go here */}
+                { nav.icon ?? <ListIcon />}
               </span>
               {(isExpanded || isHovered || isMobileOpen) && (
                 <span className={`menu-item-text`}>{nav.name}</span>
@@ -69,7 +72,7 @@ const Sidebar: React.FC = () => {
             nav.path && (
               <Link
                 href={nav.path}
-                className={`menu-item group ${
+                className={`menu-item group flex flex-row ${
                   isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
                 }`}
               >
@@ -80,10 +83,10 @@ const Sidebar: React.FC = () => {
                       : "menu-item-icon-inactive"
                   }`}
                 >
-                 {/* icon can go here */}
+                  {nav.icon ?? <ListIcon />}
                 </span>
                 {(isExpanded || isHovered || isMobileOpen) && (
-                  <span className={`menu-item-text`}>{nav.name}</span>
+                  <span className={`menu-item-text pl-2`}>{nav.name}</span>
                 )}
               </Link>
             )
