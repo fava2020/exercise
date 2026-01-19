@@ -20,7 +20,7 @@ export const userRouter = createTRPCRouter({
     .meta({ openapi: { method: "GET", path: "/getAll" } })
     .output(z.array(UserSchema))
     .query(async () => {
-        users = await initialUserValidation(users as UserSchema[], apiUrl);
+        users = await initialUserValidation(users, apiUrl);
         return users ?? [];
     }),
     getById: publicProcedure
@@ -36,7 +36,7 @@ export const userRouter = createTRPCRouter({
         **/
 
         const { id } = input;
-        users = await initialUserValidation(users as UserSchema[], apiUrl);
+        users = await initialUserValidation(users, apiUrl);
         const user = users.find((user) => user.id === id);
 
         if (!user) {

@@ -1,7 +1,8 @@
 import { TRPCError } from "@trpc/server";
 import type { UserSchema } from "./user.schema";
+import type z from "zod";
 
-export const initialUserValidation = async (users: UserSchema = [], apiUrl: string) => {
+export const initialUserValidation = async (users: z.infer<typeof UserSchema>[] = [], apiUrl: string) => {
   if (users?.length === 0 && apiUrl) {
     try {
       const response = await fetch(apiUrl);
@@ -11,7 +12,7 @@ export const initialUserValidation = async (users: UserSchema = [], apiUrl: stri
             message: 'Failed to fetch initial user data.',
         });
       }
-      users = await response.json() as UserSchema[];
+      users = await response.json() as z.infer<typeof UserSchema>[];
     } catch (error) {
         throw new TRPCError({
             code: 'INTERNAL_SERVER_ERROR',

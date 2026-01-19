@@ -3,10 +3,11 @@ import { use, useEffect, useState } from "react";
 import DetailUser from "~/components/detailUser";
 import UserSkeleton from "~/components/userSkeleton";
 import { useUser } from "~/context/UserProvider";
+import type { User } from "~/types/user.interface";
 
 export default function UserById({ params }: { params: Promise<{ id: number }> }) {
   const { getById } = useUser();
-  const [user, setUser] = useState<User>({});
+  const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
   const resolvedParams = use(params);
   const id = Number(resolvedParams.id);
@@ -22,5 +23,5 @@ export default function UserById({ params }: { params: Promise<{ id: number }> }
     return <UserSkeleton />;
   }
 
-  return <DetailUser user={user} />;
+  return <DetailUser user={user!} />;
 }

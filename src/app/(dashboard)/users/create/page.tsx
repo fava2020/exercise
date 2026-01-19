@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import UserForm from "~/components/userForm";
 
 const emptyUser = {

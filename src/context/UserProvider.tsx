@@ -1,17 +1,18 @@
 "use client";
-import { useState, createContext, useContext, useEffect, useCallback} from "react";
+import { useState, createContext, useContext, useEffect, useCallback, type ReactNode} from "react";
 import type { UserSchema } from "~/server/api/routers/user.schema";
 import { api } from "~/trpc/react";
 import type { User } from "~/types/user.interface";
 import { toast } from "sonner";
+import type z from "zod";
 
 interface UserContextType {
   users: z.infer<typeof UserSchema>[];
   isLoading: boolean;
   isActionPending: boolean;
-  update: (user: z.infer<typeof UserSchema>) => Promise<z.infer<typeof UserSchema>>;
+  update: (user: z.infer<typeof UserSchema>) => Promise<void>;
   deleteUser: (data: { id: number }) => Promise<void>;
-  create: (user: z.infer<typeof UserSchema>) => Promise<z.infer<typeof UserSchema>>;
+  create: (user: z.infer<typeof UserSchema>) => Promise<void>;
   getById: (data: { id: number }) => Promise<z.infer<typeof UserSchema>>;
 }
 
@@ -20,7 +21,6 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [users, setUsersState] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
   const [usersData] = api.user.getAll.useSuspenseQuery() ?? [];
 
   const updateMutation = api.user.update.useMutation({
@@ -61,9 +61,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setUsersState([...users, created]);    
   };
 
-  const getById = useCallback(async ({ id }: { id: number }) => {
+  const getById = useCallback(async ({ id }: { id: number }): Promise<User> => {
     const verifyUser = users.length > 0 ? users : (usersData ?? []);
-    return verifyUser.find(user => user.id === id);
+    const findUser = verifyUser.find(user => user.id === id);
+
+    return findUser as unknown as User;
   }, [users, usersData]);
 
   const deleteUser = async ({ id }: { id: number }) => {

@@ -1,9 +1,11 @@
 "use client";
+export const dynamic = 'force-dynamic';
 
 import { use, useEffect, useState } from "react";
 import UserForm from "~/components/userForm";
 import UserSkeleton from "~/components/userSkeleton";
 import { useUser } from "~/context/UserProvider";
+import type { User } from "~/types/user.interface";
 
 export default function UserById({ params }: { params: Promise<{ id: number }> }) {
   const { getById } = useUser();
@@ -24,5 +26,5 @@ export default function UserById({ params }: { params: Promise<{ id: number }> }
     return <UserSkeleton />;
   }
 
-  return <UserForm userData={user} />;
+  return <UserForm userData={user!} />;
 }
