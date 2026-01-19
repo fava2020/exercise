@@ -7,9 +7,18 @@ import {
 } from "~/components/ui/card";
 import { Label } from "~/components/ui/label";
 import type { User } from '~/types/user.interface';
+import Link from "next/link";
+import { ArrowBigLeftDash } from "lucide-react";
 
 export default function DetailUser({ user }: { user: User }) {
   return (
+    <>
+        <Link
+            href={`/`}
+            className='flex flew-row py-4'
+        >
+            <ArrowBigLeftDash /> Go Back
+        </Link>
       <Card className="w-full max-w-sm">
       <CardHeader>
         <CardTitle>User Detail</CardTitle>
@@ -77,6 +86,6 @@ export default function DetailUser({ user }: { user: User }) {
             </div>
         </div>
       </CardContent>
-    </Card>
+    </Card></>
   );
 }

@@ -13,6 +13,8 @@ import { Input} from "~/components/ui/input";
 import { Button} from "~/components/ui/button";
 import type { User } from '~/types/user.interface';
 import { useUser } from '~/context/UserProvider';
+import Link from 'next/link';
+import { ArrowBigLeftDash } from 'lucide-react';
 
 export default function UserForm({ userData }: { userData: User }) {
   const [user, setUserForm] = useState<User>(userData);
@@ -60,6 +62,13 @@ export default function UserForm({ userData }: { userData: User }) {
   };
 
   return (
+    <>
+        <Link
+            href={`/`}
+            className='flex flew-row py-4'
+        >
+            <ArrowBigLeftDash /> Go Back
+        </Link>
       <Card className="w-400 max-w-sm">
       <CardHeader>
         <CardTitle>{isEditing ? 'Update User' : 'Create User'}</CardTitle>
@@ -136,5 +145,6 @@ export default function UserForm({ userData }: { userData: User }) {
       </Button>
       </CardFooter>
     </Card>
+    </>
   );
 }

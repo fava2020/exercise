@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import { LatestUsers } from "~/components/user";
 
 export default function Users() {
