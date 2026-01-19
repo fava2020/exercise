@@ -1,28 +1,85 @@
-# Create User Management Dashboard
+# 📌 Overview
+This project is a technical assessment demonstrating a full-stack approach to user management. It integrates a mock REST API into a modern, type-safe Next.js environment, ensuring that data remains persistent across sessions using custom React Context logic.
 
-This assessment evaluates my proficiency in building a full-stack Next.js application using the T3 stack with TypeScript, tRPC, and OpenAPI. You will build a User Management Dashboard from scratch using shadcn/ui components and Tailwind CSS, integrating with the JSONPlaceholder API.
+# ✨ Features
 
-## Technology Stack
+- Full-Stack Type Safety: End-to-end typesafe APIs using tRPC.
 
-- [create-t3-app] (https://create.t3.gg/
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- Persistent State: Global user context.
 
-## Learn More
+- Modern UI: Built with shadcn/ui and Tailwind CSS.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+- API Integration: Seamless integration with JSONPlaceholder for mock data handling.
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+- Documentation: Integrated OpenAPI/Swagger support for backend procedures (Still working).
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+# 🛠️ Technology StackLayer
 
-## How do I run in my localhost this?
+| Syntax        | Description |
+| -----------   | ----------- |
+| Framework     | [create-t3-app] (https://create.t3.gg/)      |
+| Type-Safe API | [tRPC](https://trpc.io)      |
+| Styling | [Tailwind CSS](https://tailwindcss.com)      |
+| UI Components | [shadcn/ui]([https://ui.shadcn.com/])      |
+| Validation | [Zod]([https://tailwindcss.com](https://ui.shadcn.com/))      |
+| State Management | React Context API     |
 
-- Clone the repository
-- Run pnmp install
-- Run pnpm dev
+# 🚀 Getting Started
+
+## Prerequisites
+
+- Node.js installed
+
+- pnpm `(npm install -g pnpm)`
+
+Installation
+
+1. Clone the repository
+
+```
+git clone https://github.com/fava2020/exercise.git
+cd exercise
+```
+
+2. Install dependencies
+
+```
+pnpm install
+```
+
+3. Environment Setup
+
+```
+cp .env.example .env
+```
+
+4. Run the development server
+
+```
+pnpm dev
+```
+
+
+Open http://localhost:3000 in your browser to see the result. ✨
+
+# 📁 Project Structure
+
+src/types - app
+
+src/context - Logic for data persistence and global user state.
+
+src/server - tRPC router definitions, OpenAPI configurations and schema definitions.
+
+src/components - Reusable shadcn/ui and collection reusable user components.
+
+src/trpc - server tRPC, query client tRPC
+
+src/types - user interface
+
+# 🎀 Development Aesthetic
+
+Styling: Tailwind CSS with a focus on accessibility and mobile design.
+
+Linting: Strict TypeScript rules to ensure "Clean Code" principles.
+
+UX: Skeleton screens for loading states and toast notifications for CRUD actions.
